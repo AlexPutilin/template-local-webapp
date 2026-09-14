@@ -60,8 +60,12 @@ export class Router {
     }
 
     async handle(req, res) {
+        const corsHeaders = getCorsHeaders();
         try {
-            const corsHeaders = getCorsHeaders();
+            if (req.method === 'OPTIONS') {
+                return sendResponse(res, HttpResponse.empty({ statusCode: 204 }), corsHeaders);
+            }
+
             const url = new URL(req.url ?? '/', 'http://localhost');
             const pathname = normalizePath(url.pathname);
             const match = this.findRoute(req.method, pathname);
@@ -77,18 +81,18 @@ export class Router {
                     params: match.params
                 });
                 this.validateResponse(response);
-                return sendResponse(res, response);
+                return sendResponse(res, response, corsHeaders);
             }
 
             if (req.method === 'GET' || req.method === 'HEAD') {
                 const response = await serveStatic(pathname);
-                if (response) return sendResponse(res, response);
+                if (response) return sendResponse(res, response, corsHeaders);
             }
-            return sendResponse(res, await this.notFound());
+            return sendResponse(res, await this.notFound(), corsHeaders);
         } catch (error) {
             console.error('HTTP request failed:', error);
             if (res.headersSent) return res.destroy();
-            return sendResponse(res, HttpResponse.text('500 Internal Server Error', { statusCode: 500 }));
+            return sendResponse(res, HttpResponse.text('500 Internal Server Error', { statusCode: 500 }), corsHeaders);
         }
     }
 
