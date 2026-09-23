@@ -3,8 +3,11 @@ import http from 'node:http';
 
 
 export default function createHttpServer(registerRoutes) {
-    const router = new Router;
+    if (typeof registerRoutes !== 'function') {
+        throw new TypeError('createHttpServer requires a registration function.');
+    }
 
+    const router = new Router();
     registerRoutes(router);
 
     const httpServer = http.createServer((req, res) => {
