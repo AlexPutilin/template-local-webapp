@@ -17,5 +17,15 @@
                 "Content-Type"
             ]
         }
+    },
+    "websocket": {
+        "path": "/ws",
+        "heartbeatIntervalMs": 15000,
+        "handshakeTimeoutMs": 5000,
+        "maxIncomingPayloadBytes": 65536,
+        "maxBufferedBytes": 10485760,
+        "shutdownGraceMs": 2000,
+        "compression": true,
+        "compressionThresholdBytes": 1024
     }
 }

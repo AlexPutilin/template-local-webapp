@@ -24,7 +24,7 @@ Contains reusable technical core features. The framework must not contain projec
 Core features are organized by technical layer:
 
 - [`framework/http/`](http.md) provides the HTTP server, routing, responses, static file handling, CORS, and the 404 fallback.
-- `framework/websocket/` will provide WebSocket functionality.
+- [`framework/websocket/`](websocket.md) provides topic-based WebSocket updates, retained snapshots, browser subscriptions, and client presence.
 - [`framework/scheduler/`](scheduler.md) registers and controls scheduled application tasks.
 - [`framework/email/`](email.md) sends messages through the locally installed Outlook application.
 - `framework/utils/` contains shared technical utilities.
@@ -39,7 +39,7 @@ Contains the logic of the current application:
 - repositories and data access
 - application workflows
 
-Routes translate HTTP input into application calls. Scheduled tasks provide time-based application entry points. Both should remain small and delegate business logic to services. Services must not depend on HTTP or scheduler-specific objects.
+Routes translate HTTP input into application calls. Scheduled tasks provide time-based application entry points. Both should remain small and delegate business logic to services. Services must not depend on HTTP, WebSocket, or scheduler-specific objects. Application entry points may publish completed snapshots through the WebSocket layer without moving domain-specific processing into the framework.
 
 ### `web/`
 
@@ -107,6 +107,6 @@ project/
 ## Core Layer and Feature Documentation
 
 - [HTTP Layer](http.md)
-- WebSocket Layer: planned
+- [WebSocket Layer](websocket.md)
 - [Scheduler Layer](scheduler.md)
 - [Email Feature](email.md)
